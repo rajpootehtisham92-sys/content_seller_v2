@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Buyer Dashboard{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="mb-4">My Dashboard</h2>
+    <p>Welcome, <strong>{{ user.username }}</strong>!</p>
+
+    <!-- Quick Action Buttons -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <a href="#referralModal" class="btn btn-primary w-100" data-bs-toggle="modal">
+                <i class="fas fa-link"></i> Get Referral Link
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'request_withdrawal' %}" class="btn btn-warning w-100">
+                <i class="fas fa-money-bill-wave"></i> Request Withdrawal
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'withdrawal_history' %}" class="btn btn-info w-100">
+                <i class="fas fa-history"></i> Withdrawal History
+            </a>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-light text-center">
+                <div class="card-body">
+                    <h5 class="mb-0">Balance: Rs {{ user.balance|default:"0" }}</h5>
+                    <small>Min Withdrawal: Rs {{ min_withdrawal|default:"500" }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Modal -->
+    <div class="modal fade" id="referralModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Your Referral Link</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Share this link and earn <strong>{{ referral_commission }}%</strong> commission!</p>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="http://{{ request.get_host }}/users/register/buyer/?ref={{ user.username }}" id="referralLink" readonly>
+                        <button class="btn btn-outline-secondary" onclick="copyReferralLink()">Copy</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Purchased Content Section -->
+    <h3 class="mt-4">My Purchased Content</h3>
+    {% if orders %}
+        <div class="row">
+            {% for order in orders %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">{{ order.content.title }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ order.content.description|truncatewords:20 }}</p>
+                            <p><strong>Price:</strong> Rs {{ order.amount_paid }}</p>
+                            <p><strong>Status:</strong> 
+                                {% if order.status == 'verified' %}
+                                    <span class="badge bg-success">Verified</span>
+                                {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% endif %}
+                            </p>
+                            {% if order.status == 'verified' %}
+                                <a href="{% url 'view_content_videos' order.content.id %}" class="btn btn-primary btn-sm">Watch Videos</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            You haven't purchased any content yet.
+        </div>
+    {% endif %}
+
+    <!-- Recommended Content Section -->
+    <h3 class="mt-4">Recommended For You</h3>
+    {% if available_content %}
+        <div class="row">
+            {% for content in available_content %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ content.title }}</h5>
+                            <p class="card-text">{{ content.description|truncatewords:20 }}</p>
+                            <p class="text-primary fw-bold">Rs {{ content.price }}</p>
+                            <a href="{% url 'buy_content' content.id %}" class="btn btn-primary btn-sm">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-secondary">
+            No recommendations available at the moment.
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function copyReferralLink() {
+    var copyText = document.getElementById("referralLink");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    alert("Referral link copied to clipboard!");
+}
+</script>
+{% endblock %}

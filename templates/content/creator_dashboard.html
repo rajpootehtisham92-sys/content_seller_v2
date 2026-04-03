@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Creator Dashboard{% endblock %}
+{% block content %}
+<h2>Creator Dashboard</h2>
+<p>Welcome, <strong>{{ user.username }}</strong>!</p>
+
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">
+        <h4>Your Content</h4>
+    </div>
+    <div class="card-body">
+        {% if contents %}
+            <div class="row">
+                {% for content in contents %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5>{{ content.title }}</h5>
+                                <p>Price: Rs {{ content.price }}</p>
+                                <p>Status: {% if content.is_active %}Active{% else %}Inactive{% endif %}</p>
+                                <a href="{% url 'add_content' %}" class="btn btn-sm btn-primary">Add New</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>You haven't uploaded any content yet.</p>
+            <a href="{% url 'add_content' %}" class="btn btn-primary">Add New Content</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

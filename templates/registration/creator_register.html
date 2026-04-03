@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Creator Registration{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4>Register as Creator</h4>
+            </div>
+            <div class="card-body">
+                {% if ref_code %}
+                    <div class="alert alert-info">
+                        You are joining under referral code: <strong>{{ ref_code }}</strong>
+                    </div>
+                    <input type="hidden" name="ref_code" value="{{ ref_code }}">
+                {% endif %}
+                
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success w-100">Sign Up</button>
+                </form>
+                <hr>
+                <p class="text-center">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

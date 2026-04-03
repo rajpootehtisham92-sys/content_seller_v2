@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ content.title }} - Videos{% endblock %}
+{% block content %}
+<h2>{{ content.title }}</h2>
+<p>{{ content.description }}</p>
+
+<h3 class="mt-4">All Videos ({{ content.videos.all|length }} videos)</h3>
+<div class="row">
+    {% for video in content.videos.all %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h6>{{ video.title|default:"Video" }} (Part {{ forloop.counter }})</h6>
+                </div>
+                <div class="card-body">
+                    <video width="100%" controls>
+                        <source src="{{ video.video_file.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No videos available for this content.</p>
+    {% endfor %}
+</div>
+<a href="{% url 'buyer_dashboard' %}" class="btn btn-primary mt-3">← Back to Dashboard</a>
+{% endblock %}

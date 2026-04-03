@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ content.title }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>{{ content.title }}</h2>
+        <p>{{ content.description }}</p>
+        <p class="h4">Price: Rs{{ content.price }}</p>
+        
+        {% if user.is_authenticated and user.role == 'buyer' %}
+            <a href="{% url 'buy_content' content.id %}" class="btn btn-success btn-lg">Buy Now</a>
+        {% elif not user.is_authenticated %}
+            <a href="{% url 'login' %}" class="btn btn-primary">Login to Buy</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

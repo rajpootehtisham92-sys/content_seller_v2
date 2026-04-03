@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Request Withdrawal{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Request Withdrawal</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Your Balance:</strong> Rs {{ balance }}<br>
+                    <strong>Minimum Withdrawal:</strong> Rs {{ min_withdrawal }}
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success w-100">Submit Request</button>
+                </form>
+                <a href="{% url 'buyer_dashboard' %}" class="btn btn-link mt-2">← Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

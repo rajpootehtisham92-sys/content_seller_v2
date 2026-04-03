@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="jumbotron text-center bg-light p-5 rounded">
+    <h1>Welcome to Content Seller</h1>
+    <p>Buy and sell exclusive digital content.</p>
+    {% if not user.is_authenticated %}
+        <a class="btn btn-primary btn-lg" href="{% url 'buyer_register' %}">Get Started</a>
+    {% endif %}
+</div>
+<h2>Latest Content</h2>
+<div class="row">
+    {% for content in contents %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5>{{ content.title }}</h5>
+                    <p>Rs{{ content.price }}</p>
+                    <a href="{% url 'content_detail' content.id %}" class="btn btn-sm btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No content yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Withdrawal History{% endblock %}
+{% block content %}
+<h2>Withdrawal History</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for w in withdrawals %}
+        <tr>
+            <td>Rs {{ w.amount }}</td>
+            <td>{{ w.get_payment_method_display }}</td>
+            <td>
+                <span class="badge {% if w.status == 'approved' %}bg-success{% elif w.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                    {{ w.get_status_display }}
+                </span>
+            </td>
+            <td>{{ w.created_at|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No withdrawal requests yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'buyer_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+{% endblock %}

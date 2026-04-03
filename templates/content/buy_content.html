@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Buy Content{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4>Buy: {{ content.title }}</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Price: <span class="text-success">Rs{{ content.price }}</span></h5>
+                <hr>
+                <h6>Payment Details</h6>
+                <p class="text-muted">Please send the exact amount to one of the accounts below, then enter your transaction ID.</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="payment_method" class="form-label">Choose payment method:</label>
+                        <select name="payment_method" id="payment_method" class="form-select" required>
+                            {% for pm in payment_methods %}
+                                <option value="{{ pm.id }}">
+                                    {{ pm.name }} - {{ pm.account_title }} ({{ pm.account_number }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transaction_id" class="form-label">Transaction ID / Reference:</label>
+                        <input type="text" name="transaction_id" id="transaction_id" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">I have sent the payment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

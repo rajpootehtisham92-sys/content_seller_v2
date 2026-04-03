@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Add Content{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4>Add New Content</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h5>Basic Information</h5>
+                    {{ form.as_p }}
+                    
+                    <hr>
+                    <h5>Videos (Upload up to 5 videos for this content)</h5>
+                    {{ formset.management_form }}
+                    {% for video_form in formset %}
+                        <div class="border p-3 mb-3">
+                            {{ video_form.as_p }}
+                        </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-success w-100">Upload All Videos</button>
+                </form>
+                <a href="{% url 'creator_dashboard' %}" class="btn btn-link mt-2">← Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
