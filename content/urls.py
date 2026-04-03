@@ -14,4 +14,5 @@ urlpatterns = [
     path('withdraw/', views.request_withdrawal, name='request_withdrawal'),
     path('withdrawals/', views.withdrawal_history, name='withdrawal_history'),
     path('videos/<int:content_id>/', views.view_content_videos, name='view_content_videos'),
+    path('download/<int:content_id>/', views.download_zip, name='download_zip'),
 ]

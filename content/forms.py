@@ -4,7 +4,7 @@ from .models import Content, Video, WithdrawalRequest
 class ContentForm(forms.ModelForm):
     class Meta:
         model = Content
-        fields = ['title', 'description', 'content_type', 'link_url', 'price', 'is_active']
+        fields = ['title', 'description', 'content_type', 'link_url', 'video_file', 'zip_file', 'price', 'is_active']
 
 class VideoForm(forms.ModelForm):
     class Meta:

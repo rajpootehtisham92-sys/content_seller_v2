@@ -6,6 +6,7 @@ class Content(models.Model):
         ('link', 'Link'),
         ('video', 'Video'),
     )
+    zip_file = models.FileField(upload_to='content_zips/', blank=True, null=True, help_text="Upload a ZIP file containing all videos")
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, limit_choices_to={'role': 'creator'})
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -17,6 +18,7 @@ class Content(models.Model):
     is_approved = models.BooleanField(default=False, help_text="Admin approval required before buyers can see")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
 
     def __str__(self):
         return self.title

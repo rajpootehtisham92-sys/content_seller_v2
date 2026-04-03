@@ -11,11 +11,15 @@ class VideoInline(admin.TabularInline):
 
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
-    list_display = ('title', 'creator', 'price', 'content_type', 'is_approved', 'is_active', 'created_at')
-    list_filter = ('is_approved', 'is_active', 'content_type')
+    list_display = ('title', 'creator', 'price', 'content_type', 'has_zip', 'created_at')
+    list_filter = ('content_type', 'creator')
     search_fields = ('title', 'description')
-    list_editable = ('is_approved', 'is_active')
     inlines = [VideoInline]
+    
+    def has_zip(self, obj):
+        return bool(obj.zip_file)
+    has_zip.boolean = True
+    has_zip.short_description = 'Has ZIP'
 
 @admin.register(PaymentMethod)
 class PaymentMethodAdmin(admin.ModelAdmin):

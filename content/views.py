@@ -234,3 +234,25 @@ def creator_dashboard(request):
         'user': request.user,
         'contents': contents
     })
+
+from django.http import FileResponse, Http404
+import os
+
+@login_required
+def download_zip(request, content_id):
+    content = get_object_or_404(Content, id=content_id, is_active=True)
+    
+    # Check if user has purchased this content
+    has_purchased = Order.objects.filter(buyer=request.user, content=content, status='verified').exists()
+    
+    if not has_purchased:
+        messages.error(request, 'You have not purchased this content.')
+        return redirect('buyer_dashboard')
+    
+    if not content.zip_file or not content.zip_file.path:
+        raise Http404("ZIP file not available")
+    
+    # Serve the file for download
+    response = FileResponse(open(content.zip_file.path, 'rb'), content_type='application/zip')
+    response['Content-Disposition'] = f'attachment; filename="{content.title}.zip"'
+    return response

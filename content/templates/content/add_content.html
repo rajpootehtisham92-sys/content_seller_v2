@@ -5,25 +5,39 @@
     <div class="col-md-8">
         <div class="card shadow">
             <div class="card-header bg-success text-white">
-                <h4>Add New Content</h4>
+                <h4 class="mb-0">Add New Content</h4>
             </div>
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     
-                    <h5>Basic Information</h5>
+                    <h5 class="mb-3">Basic Information</h5>
                     {{ form.as_p }}
                     
                     <hr>
-                    <h5>Videos (Upload up to 5 videos for this content)</h5>
+                    
+                    <h5 class="mb-3">Upload Videos (Individual)</h5>
+                    <p class="text-muted">You can upload up to 5 individual videos</p>
                     {{ formset.management_form }}
                     {% for video_form in formset %}
-                        <div class="border p-3 mb-3">
+                        <div class="border p-3 mb-3 rounded">
                             {{ video_form.as_p }}
                         </div>
                     {% endfor %}
                     
-                    <button type="submit" class="btn btn-success w-100">Upload All Videos</button>
+                    <hr>
+                    
+                    <h5 class="mb-3">OR Upload ZIP File</h5>
+                    <div class="alert alert-info">
+                        <strong>Option:</strong> Instead of uploading individual videos, you can upload a ZIP file containing all videos. Customers can download the entire pack after purchase.
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_zip_file" class="form-label">ZIP File with All Videos</label>
+                        <input type="file" name="zip_file" id="id_zip_file" class="form-control" accept=".zip">
+                        <small class="text-muted">Upload a ZIP file containing all videos. Customers can download the entire pack.</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100 mt-3">Upload Content</button>
                 </form>
                 <a href="{% url 'creator_dashboard' %}" class="btn btn-link mt-2">← Back to Dashboard</a>
             </div>
